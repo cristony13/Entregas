@@ -19,6 +19,7 @@
 
   <script>
     function enviarLocalizacao(latitude, longitude) {
+      console.log("Enviando localização:", latitude, longitude); // 👈 pra debug
       fetch("https://script.google.com/macros/s/AKfycbwDXb0R6cphJ16dAhebrSidxPCucyjaWVhD6WNgr66i-19hqQ8oHzEs-kH5tX7RLlt2Fg/exec", {
         method: "POST",
         body: JSON.stringify({ latitude, longitude }),
